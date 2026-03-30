@@ -1,0 +1,55 @@
+========================================
+  EXACT COMMANDS TO PUSH TO GITHUB
+========================================
+
+STEP 1: Create GitHub Repository
+---------------------------------
+1. Go to: https://github.com/new
+2. Repository name: document-chat-app
+3. Description: AI-powered document chat using Google Gemini and RAG
+4. Visibility: Public
+5. DO NOT check "Initialize with README"
+6. Click "Create repository"
+
+
+STEP 2: Run These Commands
+---------------------------
+Copy and paste these commands one by one:
+
+git remote add origin https://github.com/Navaprabhas/document-chat-app.git
+git push -u origin main
+
+
+STEP 3: Deploy on Streamlit Cloud
+----------------------------------
+1. Go to: https://share.streamlit.io
+2. Sign in with GitHub
+3. Click "New app"
+4. Repository: Navaprabhas/document-chat-app
+5. Branch: main
+6. Main file: app.py
+7. Click "Advanced settings"
+8. Paste these secrets:
+
+GOOGLE_API_KEY = "AIzaSyDP_6xWSlaBM4z6B6rdfkVYhVJKgECDBFQ"
+LLM_PROVIDER = "google"
+GOOGLE_MODEL = "models/gemini-2.5-flash"
+GOOGLE_EMBEDDING_MODEL = "models/gemini-embedding-2-preview"
+EMBEDDING_MODEL = "google"
+CHUNK_SIZE = "1000"
+CHUNK_OVERLAP = "200"
+TOP_K = "5"
+TEMPERATURE = "0.7"
+MAX_TOKENS = "2000"
+MAX_HISTORY_MESSAGES = "10"
+
+9. Click "Save"
+10. Click "Deploy!"
+
+
+DONE! Your app will be live in 2-3 minutes at:
+https://document-chat-navaprabhas.streamlit.app
+
+========================================
+
+Need help? See DEPLOY_NOW.md for detailed guide.
