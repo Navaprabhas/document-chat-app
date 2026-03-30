@@ -53,26 +53,17 @@ gh repo create document-chat-app --public --source=. --remote=origin --push
    - **Main file path**: `app.py`
    - **App URL**: Choose a name (e.g., `document-chat-navaprabhas`)
 
-3. Click **"Advanced settings"**
+3. Click **"Advanced settings"** (Optional - skip for public deployment)
 
-4. In **"Secrets"** section, paste this EXACTLY:
+**For Public Deployment (Recommended):**
+- Skip adding secrets
+- Users will enter their own API keys
+- You won't get billed for their usage!
 
-```toml
-GOOGLE_API_KEY = "AIzaSyDP_6xWSlaBM4z6B6rdfkVYhVJKgECDBFQ"
-LLM_PROVIDER = "google"
-GOOGLE_MODEL = "models/gemini-2.5-flash"
-GOOGLE_EMBEDDING_MODEL = "models/gemini-embedding-2-preview"
-EMBEDDING_MODEL = "google"
-CHUNK_SIZE = "1000"
-CHUNK_OVERLAP = "200"
-TOP_K = "5"
-TEMPERATURE = "0.7"
-MAX_TOKENS = "2000"
-MAX_HISTORY_MESSAGES = "10"
-```
+**For Private/Personal Use Only:**
+- Add your API key to secrets if you want
 
-5. Click **"Save"**
-6. Click **"Deploy!"**
+4. Click **"Deploy!"**
 
 ### 2.3 Wait for Deployment
 
@@ -92,11 +83,15 @@ https://document-chat-navaprabhas.streamlit.app
 
 ## ✅ Test Your Deployed App
 
-1. Upload a PDF
-2. Click "Process Documents"
-3. Ask a question
-4. Verify you get an answer with citations
-5. Check "View Sources" expander
+1. Visit your app URL
+2. Enter your Google Gemini API key (get one at https://makersuite.google.com/app/apikey)
+3. Upload a PDF
+4. Click "Process Documents"
+5. Ask a question
+6. Verify you get an answer with citations
+7. Check "View Sources" expander
+
+**Note:** Each user enters their own API key, so you won't get billed for their usage!
 
 ## 🔄 Update Your App Later
 

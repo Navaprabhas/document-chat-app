@@ -114,6 +114,10 @@ def initialize_session_state():
         st.session_state.chat_engine = None
     if 'embeddings_manager' not in st.session_state:
         st.session_state.embeddings_manager = None
+    if 'api_key_configured' not in st.session_state:
+        st.session_state.api_key_configured = False
+    if 'user_api_key' not in st.session_state:
+        st.session_state.user_api_key = None
 
 def sidebar():
     """Render sidebar with document upload and management"""
@@ -188,6 +192,65 @@ def sidebar():
         Config.CHUNK_SIZE = chunk_size
         Config.CHUNK_OVERLAP = chunk_overlap
         Config.TOP_K = top_k
+
+def check_api_key_section():
+    """Display API key input section"""
+    import os
+    
+    # Check if API key is in environment (for local development)
+    env_api_key = os.getenv('GOOGLE_API_KEY')
+    
+    # If no API key in session and no env key, show input
+    if not st.session_state.api_key_configured and not env_api_key:
+        st.warning("⚠️ Please enter your Google Gemini API key to use this application.")
+        
+        with st.expander("🔑 Enter Your Google Gemini API Key", expanded=True):
+            st.markdown("""
+            ### How to get your API key:
+            1. Go to [Google AI Studio](https://makersuite.google.com/app/apikey)
+            2. Sign in with your Google account
+            3. Click "Create API Key"
+            4. Copy your API key and paste it below
+            
+            **Note:** Your API key is only stored in your browser session and is never saved on our servers.
+            """)
+            
+            api_key_input = st.text_input(
+                "Google Gemini API Key",
+                type="password",
+                placeholder="Enter your API key here...",
+                help="Your API key will only be used for this session"
+            )
+            
+            col1, col2 = st.columns([1, 3])
+            with col1:
+                if st.button("✅ Set API Key", type="primary"):
+                    if api_key_input and len(api_key_input) > 20:
+                        st.session_state.user_api_key = api_key_input
+                        st.session_state.api_key_configured = True
+                        # Set it in environment for this session
+                        os.environ['GOOGLE_API_KEY'] = api_key_input
+                        st.success("✅ API key configured successfully!")
+                        st.rerun()
+                    else:
+                        st.error("Please enter a valid API key")
+        
+        return False
+    else:
+        # API key is configured (either from user input or environment)
+        if not st.session_state.api_key_configured and env_api_key:
+            st.session_state.api_key_configured = True
+            st.session_state.user_api_key = env_api_key
+        
+        # Show configured status in sidebar
+        with st.sidebar:
+            st.success("✅ API Key Configured")
+            if st.button("🔄 Change API Key"):
+                st.session_state.api_key_configured = False
+                st.session_state.user_api_key = None
+                st.rerun()
+        
+        return True
 
 def process_documents(uploaded_files):
     """Process uploaded PDF documents"""
@@ -317,6 +380,11 @@ def main():
     # Header
     st.markdown('<div class="main-header">📚 Document Chat Assistant</div>', unsafe_allow_html=True)
     st.markdown("Upload PDF documents and chat with them using AI-powered search and generation.")
+    
+    # Check API key first
+    if not check_api_key_section():
+        st.info("👆 Please configure your API key above to continue.")
+        st.stop()
     
     # Sidebar
     sidebar()

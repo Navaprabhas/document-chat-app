@@ -4,6 +4,7 @@ A production-ready RAG (Retrieval Augmented Generation) application that allows 
 
 ## ✨ Features
 
+- **User API Key Input**: Users enter their own Google Gemini API key (no billing concerns for you!)
 - **Multi-document Upload**: Upload and process multiple PDF documents simultaneously
 - **Intelligent Text Chunking**: Smart text splitting with configurable overlap for better context
 - **Semantic Search**: Vector-based similarity search through documents using embeddings
@@ -11,9 +12,10 @@ A production-ready RAG (Retrieval Augmented Generation) application that allows 
 - **Conversation Memory**: Maintains chat history for contextual conversations
 - **Export Chat History**: Download conversation history as JSON
 - **Document Preview**: View loaded documents with statistics
-- **Flexible LLM Support**: Works with OpenAI GPT or local models via Ollama
-- **Vector Database**: ChromaDB for efficient embedding storage and retrieval
+- **Google Gemini Integration**: Powered by Google's latest Gemini 2.5 Flash model
+- **FAISS Vector Store**: Efficient embedding storage and retrieval
 - **Clean UI**: Modern Streamlit interface with responsive design
+- **Secure**: API keys stored only in browser session, never on servers
 
 ## 🏗️ Architecture
 
@@ -99,27 +101,38 @@ OLLAMA_BASE_URL=http://localhost:11434
 
 ## 📖 Usage Guide
 
-### 1. Upload Documents
+### 1. Enter API Key (First Time)
+- Visit the app
+- Click "Enter Your Google Gemini API Key"
+- Get your free API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
+- Paste your API key and click "Set API Key"
+- Your key is stored only in your browser session
+
+### 2. Upload Documents
+### 2. Upload Documents
 - Click "Browse files" in the sidebar
 - Select one or more PDF documents
 - Click "Process Documents"
 - Wait for processing to complete
 
-### 2. Ask Questions
+### 3. Ask Questions
+### 3. Ask Questions
 - Type your question in the chat input
 - Press Enter or click Send
 - View the AI-generated response with citations
 
-### 3. View Sources
+### 4. View Sources
+### 4. View Sources
 - Click "View Sources" under any response
 - See which documents and pages were used
 - Check relevance scores for each source
 
-### 4. Export Chat
+### 5. Export Chat
+### 5. Export Chat
 - Click "Export Chat History" in the sidebar
 - Download JSON file with full conversation
 
-### 5. Adjust Settings
+### 6. Adjust Settings
 - Use sliders in sidebar to adjust:
   - Chunk Size (500-2000 characters)
   - Chunk Overlap (0-500 characters)

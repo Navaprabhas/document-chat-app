@@ -57,26 +57,13 @@ git push -u origin main
    - **Main file path**: `app.py`
    - **App URL**: Choose a custom URL (e.g., `document-chat-navaprabhas`)
 
-### 2.3 Configure Secrets
+### 2.3 Configure Secrets (Optional)
 
-1. Click **"Advanced settings"**
-2. In the **"Secrets"** section, paste:
+**For Public Deployment (Recommended):**
+Skip this step! Don't add any secrets. Users will enter their own API keys when they use the app.
 
-```toml
-GOOGLE_API_KEY = "AIzaSyDP_6xWSlaBM4z6B6rdfkVYhVJKgECDBFQ"
-LLM_PROVIDER = "google"
-GOOGLE_MODEL = "models/gemini-2.5-flash"
-GOOGLE_EMBEDDING_MODEL = "models/gemini-embedding-2-preview"
-EMBEDDING_MODEL = "google"
-CHUNK_SIZE = "1000"
-CHUNK_OVERLAP = "200"
-TOP_K = "5"
-TEMPERATURE = "0.7"
-MAX_TOKENS = "2000"
-MAX_HISTORY_MESSAGES = "10"
-```
-
-3. Click **"Save"**
+**For Private/Personal Use Only:**
+If you want to use your own API key without entering it each time, click "Advanced settings" and add your API key to secrets.
 
 ### 2.4 Deploy
 
@@ -88,19 +75,21 @@ MAX_HISTORY_MESSAGES = "10"
 
 Once deployed, test your app:
 
-1. ✅ Upload a PDF document
-2. ✅ Click "Process Documents"
-3. ✅ Ask a question
-4. ✅ Verify response with citations
-5. ✅ Check "View Sources" works
+1. ✅ Enter your Google Gemini API key
+2. ✅ Upload a PDF document
+3. ✅ Click "Process Documents"
+4. ✅ Ask a question
+5. ✅ Verify response with citations
+6. ✅ Check "View Sources" works
 
 ## 🔒 Security Best Practices
 
 ### For Public Deployment:
 
-1. **Never commit API keys** to GitHub
-2. **Use Streamlit Secrets** for all sensitive data
-3. **Add rate limiting** (optional):
+1. **Don't add API keys to Streamlit Secrets** - Let users enter their own
+2. **Users enter their own API keys** - Keys are stored only in browser session
+3. **No billing concerns** - Each user uses their own Google AI quota
+4. **Privacy** - API keys never leave the user's browser session
 
 ```python
 # In app.py, add at the top
