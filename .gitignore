@@ -1,0 +1,42 @@
+# Environment
+.env
+venv/
+env/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Vector Store
+chroma_db/
+faiss_store/
+*.db
+
+# Temporary files
+temp/
+*.tmp
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Streamlit
+.streamlit/
+
+# Documents (optional - uncomment if you don't want to track uploaded docs)
+# uploads/
+# *.pdf
