@@ -11,7 +11,8 @@ load_dotenv()
 class Config:
     """Application configuration"""
     
-    # API Keys
+    # API Keys - Note: These are read from environment at runtime
+    # For user-entered keys, they are set in os.environ by the app
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
     GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "")
     

@@ -2,6 +2,7 @@
 RAG-based chat engine for document Q&A
 """
 import logging
+import os
 from typing import List, Dict, Tuple
 from langchain_openai import ChatOpenAI
 from langchain_community.chat_models import ChatOllama
@@ -31,8 +32,9 @@ class ChatEngine:
         try:
             if Config.LLM_PROVIDER == "openai":
                 logger.info(f"Using OpenAI model: {Config.OPENAI_MODEL}")
+                api_key = os.getenv("OPENAI_API_KEY", "")
                 return ChatOpenAI(
-                    openai_api_key=Config.OPENAI_API_KEY,
+                    openai_api_key=api_key,
                     model=Config.OPENAI_MODEL,
                     temperature=Config.TEMPERATURE,
                     max_tokens=Config.MAX_TOKENS
@@ -40,9 +42,13 @@ class ChatEngine:
             elif Config.LLM_PROVIDER == "google":
                 logger.info(f"Using Google model: {Config.GOOGLE_MODEL}")
                 from langchain_google_genai import ChatGoogleGenerativeAI
+                # Get API key directly from environment (updated by user input)
+                api_key = os.getenv("GOOGLE_API_KEY", "")
+                if not api_key:
+                    raise ValueError("Google API key not found. Please enter your API key.")
                 return ChatGoogleGenerativeAI(
                     model=Config.GOOGLE_MODEL,
-                    google_api_key=Config.GOOGLE_API_KEY,
+                    google_api_key=api_key,
                     temperature=Config.TEMPERATURE,
                     max_output_tokens=Config.MAX_TOKENS
                 )

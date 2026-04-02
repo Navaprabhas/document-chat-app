@@ -2,6 +2,7 @@
 Embeddings and vector store management
 """
 import logging
+import os
 from typing import List, Dict, Optional
 import pickle
 from pathlib import Path
@@ -28,17 +29,21 @@ class EmbeddingsManager:
         try:
             if Config.EMBEDDING_MODEL == "openai":
                 logger.info("Using OpenAI embeddings")
+                api_key = os.getenv("OPENAI_API_KEY", "")
                 return OpenAIEmbeddings(
-                    openai_api_key=Config.OPENAI_API_KEY,
+                    openai_api_key=api_key,
                     model=Config.OPENAI_EMBEDDING_MODEL
                 )
             elif Config.EMBEDDING_MODEL == "google":
                 logger.info(f"Using Google embeddings: {Config.GOOGLE_EMBEDDING_MODEL}")
                 from langchain_google_genai import GoogleGenerativeAIEmbeddings
-                # Use the correct Google embedding model
+                # Get API key directly from environment (updated by user input)
+                api_key = os.getenv("GOOGLE_API_KEY", "")
+                if not api_key:
+                    raise ValueError("Google API key not found. Please enter your API key.")
                 return GoogleGenerativeAIEmbeddings(
                     model=Config.GOOGLE_EMBEDDING_MODEL,
-                    google_api_key=Config.GOOGLE_API_KEY,
+                    google_api_key=api_key,
                     task_type="retrieval_document"
                 )
             elif Config.EMBEDDING_MODEL == "ollama":
