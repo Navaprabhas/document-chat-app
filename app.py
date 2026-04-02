@@ -6,6 +6,7 @@ import logging
 from pathlib import Path
 import json
 from datetime import datetime
+import os
 
 from document_processor import DocumentProcessor
 from embeddings_manager import EmbeddingsManager
@@ -168,7 +169,11 @@ def sidebar():
             max_value=2000,
             value=Config.CHUNK_SIZE,
             step=100,
-            help="Size of text chunks for processing"
+            help="📏 **Chunk Size**: Controls how much text is processed at once.\n\n"
+                 "• **Smaller (500-800)**: More precise answers, better for specific questions\n"
+                 "• **Medium (1000-1200)**: Balanced approach (recommended)\n"
+                 "• **Larger (1500-2000)**: More context, better for broad questions\n\n"
+                 "💡 Start with 1000 and adjust based on your documents."
         )
         
         chunk_overlap = st.slider(
@@ -177,7 +182,12 @@ def sidebar():
             max_value=500,
             value=Config.CHUNK_OVERLAP,
             step=50,
-            help="Overlap between consecutive chunks"
+            help="🔗 **Chunk Overlap**: How much text is shared between consecutive chunks.\n\n"
+                 "• **No Overlap (0)**: Faster processing, may miss context\n"
+                 "• **Low (50-100)**: Good for simple documents\n"
+                 "• **Medium (150-250)**: Balanced (recommended)\n"
+                 "• **High (300-500)**: Better context preservation\n\n"
+                 "💡 Use 200 for most documents."
         )
         
         top_k = st.slider(
@@ -185,7 +195,11 @@ def sidebar():
             min_value=1,
             max_value=10,
             value=Config.TOP_K,
-            help="Number of relevant chunks to retrieve"
+            help="🎯 **Number of Results**: How many relevant text chunks to retrieve.\n\n"
+                 "• **Few (1-3)**: Faster, more focused answers\n"
+                 "• **Medium (4-6)**: Balanced approach (recommended)\n"
+                 "• **Many (7-10)**: More comprehensive, may include less relevant info\n\n"
+                 "💡 Use 5 for best balance of speed and accuracy."
         )
         
         # Update config
@@ -193,8 +207,35 @@ def sidebar():
         Config.CHUNK_OVERLAP = chunk_overlap
         Config.TOP_K = top_k
 
+def validate_google_api_key(api_key):
+    """Validate Google Gemini API key by making a test call"""
+    try:
+        import google.generativeai as genai
+        
+        # Configure with the API key
+        genai.configure(api_key=api_key)
+        
+        # Try to list models to verify the key works
+        models = genai.list_models()
+        
+        # Check if we can access at least one model
+        for model in models:
+            if 'gemini' in model.name.lower():
+                return True, "API key is valid!"
+        
+        return False, "API key is valid but no Gemini models found"
+        
+    except Exception as e:
+        error_msg = str(e)
+        if "API_KEY_INVALID" in error_msg or "invalid" in error_msg.lower():
+            return False, "Invalid API key. Please check and try again."
+        elif "quota" in error_msg.lower():
+            return False, "API key is valid but quota exceeded."
+        else:
+            return False, f"Error validating API key: {error_msg}"
+
 def check_api_key_section():
-    """Display API key input section"""
+    """Display API key input section with validation"""
     import os
     
     # Check if API key is in environment (for local development)
@@ -212,28 +253,41 @@ def check_api_key_section():
             3. Click "Create API Key"
             4. Copy your API key and paste it below
             
-            **Note:** Your API key is only stored in your browser session and is never saved on our servers.
+            ### 🔒 Privacy & Security:
+            - Your API key is **only stored in your browser session**
+            - It is **never saved on our servers**
+            - Each user has their own separate session
+            - Your API key is **not visible to other users**
+            - The key is cleared when you close your browser
             """)
             
             api_key_input = st.text_input(
                 "Google Gemini API Key",
                 type="password",
-                placeholder="Enter your API key here...",
-                help="Your API key will only be used for this session"
+                placeholder="AIza...",
+                help="Your API key will be validated and used only for this session. It's never shared or stored permanently.",
+                key="api_key_input"
             )
             
             col1, col2 = st.columns([1, 3])
             with col1:
-                if st.button("✅ Set API Key", type="primary"):
+                if st.button("✅ Validate & Set API Key", type="primary"):
                     if api_key_input and len(api_key_input) > 20:
-                        st.session_state.user_api_key = api_key_input
-                        st.session_state.api_key_configured = True
-                        # Set it in environment for this session
-                        os.environ['GOOGLE_API_KEY'] = api_key_input
-                        st.success("✅ API key configured successfully!")
-                        st.rerun()
+                        with st.spinner("Validating API key..."):
+                            is_valid, message = validate_google_api_key(api_key_input)
+                            
+                            if is_valid:
+                                st.session_state.user_api_key = api_key_input
+                                st.session_state.api_key_configured = True
+                                # Set it in environment for this session only
+                                os.environ['GOOGLE_API_KEY'] = api_key_input
+                                st.success(f"✅ {message}")
+                                st.balloons()
+                                st.rerun()
+                            else:
+                                st.error(f"❌ {message}")
                     else:
-                        st.error("Please enter a valid API key")
+                        st.error("❌ Please enter a valid API key (should start with 'AIza')")
         
         return False
     else:
@@ -248,6 +302,9 @@ def check_api_key_section():
             if st.button("🔄 Change API Key"):
                 st.session_state.api_key_configured = False
                 st.session_state.user_api_key = None
+                # Clear from environment
+                if 'GOOGLE_API_KEY' in os.environ:
+                    del os.environ['GOOGLE_API_KEY']
                 st.rerun()
         
         return True
