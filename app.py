@@ -28,78 +28,225 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS
+# Custom CSS - Modern, Beautiful Design
 st.markdown("""
 <style>
+    /* Main container */
+    .main {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    }
+    
+    /* Header styling */
     .main-header {
-        font-size: 2.5rem;
-        font-weight: bold;
-        color: #1f77b4;
+        font-size: 3rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
         text-align: center;
+        margin-bottom: 1rem;
+        padding: 1rem 0;
+    }
+    
+    .subtitle {
+        text-align: center;
+        color: #64748b;
+        font-size: 1.1rem;
         margin-bottom: 2rem;
     }
+    
+    /* Document card styling */
+    .doc-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin: 1rem 0;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-left: 4px solid #667eea;
+        transition: transform 0.2s;
+    }
+    
+    .doc-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Suggested questions */
+    .suggested-question {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 25px;
+        margin: 0.5rem;
+        cursor: pointer;
+        display: inline-block;
+        transition: all 0.3s;
+        border: none;
+        font-size: 0.95rem;
+    }
+    
+    .suggested-question:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+    
+    /* Chat messages */
     .chat-message {
-        padding: 1rem;
-        border-radius: 0.5rem;
-        margin-bottom: 1rem;
-        color: #000000 !important;
+        padding: 1.5rem;
+        border-radius: 16px;
+        margin-bottom: 1.5rem;
+        animation: fadeIn 0.3s;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
     .user-message {
-        background-color: #e3f2fd;
-        color: #000000 !important;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white !important;
+        margin-left: 20%;
     }
+    
+    .user-message p, .user-message strong {
+        color: white !important;
+    }
+    
     .assistant-message {
-        background-color: #f5f5f5;
-        color: #000000 !important;
+        background: white;
+        color: #1e293b !important;
+        margin-right: 20%;
+        border: 1px solid #e2e8f0;
     }
-    .chat-message p {
-        color: #000000 !important;
-        margin: 0;
+    
+    .assistant-message p, .assistant-message strong {
+        color: #1e293b !important;
     }
-    .chat-message strong {
-        color: #1f77b4 !important;
+    
+    /* Icons */
+    .message-icon {
+        font-size: 1.5rem;
+        margin-right: 0.5rem;
     }
-    .citation {
-        font-size: 0.85rem;
-        color: #666;
-        font-style: italic;
-        margin-top: 0.5rem;
+    
+    /* Citations */
+    .citation-card {
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        padding: 1.25rem;
+        border-radius: 12px;
+        margin: 0.75rem 0;
+        border-left: 4px solid #667eea;
+        transition: all 0.2s;
     }
+    
+    .citation-card:hover {
+        transform: translateX(4px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Buttons */
     .stButton>button {
         width: 100%;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s;
+        border: none;
     }
-    /* Fix Streamlit chat message styling */
-    .stChatMessage {
-        background-color: transparent !important;
+    
+    .stButton>button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
     }
-    .stChatMessage [data-testid="stMarkdownContainer"] p {
-        color: #000000 !important;
+    
+    /* Info boxes */
+    .info-box {
+        background: linear-gradient(135deg, #e0e7ff 0%, #cffafe 100%);
+        padding: 1.5rem;
+        border-radius: 12px;
+        border-left: 4px solid #667eea;
+        margin: 1rem 0;
     }
-    /* Fix expander styling for View Sources */
+    
+    /* Stats cards */
+    .stat-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        margin: 0.5rem;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+    .stat-label {
+        color: #64748b;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+    }
+    
+    /* Expander styling */
     .streamlit-expanderHeader {
-        background-color: #f0f2f6 !important;
-        color: #000000 !important;
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        border-radius: 10px;
+        font-weight: 600;
+        color: #1e293b !important;
     }
+    
     .streamlit-expanderContent {
-        background-color: #ffffff !important;
-        color: #000000 !important;
-        border: 1px solid #e0e0e0 !important;
+        background: white;
+        border-radius: 0 0 10px 10px;
+        border: 1px solid #e2e8f0;
     }
-    /* Fix all text in expander */
-    .streamlit-expanderContent p,
-    .streamlit-expanderContent div,
-    .streamlit-expanderContent span,
-    .streamlit-expanderContent strong,
-    .streamlit-expanderContent em {
-        color: #000000 !important;
+    
+    /* Sidebar styling */
+    .css-1d391kg {
+        background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
     }
-    /* Fix markdown in expander */
-    .streamlit-expanderContent [data-testid="stMarkdownContainer"] {
-        color: #000000 !important;
+    
+    /* Progress bar */
+    .stProgress > div > div {
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
     }
-    .streamlit-expanderContent [data-testid="stMarkdownContainer"] * {
-        color: #000000 !important;
+    
+    /* File uploader */
+    .uploadedFile {
+        background: white;
+        border-radius: 10px;
+        padding: 1rem;
+        margin: 0.5rem 0;
     }
+    
+    /* Success/Error messages */
+    .stSuccess {
+        background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        border-left: 4px solid #10b981;
+        border-radius: 10px;
+    }
+    
+    .stError {
+        background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+        border-left: 4px solid #ef4444;
+        border-radius: 10px;
+    }
+    
+    .stWarning {
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        border-left: 4px solid #f59e0b;
+        border-radius: 10px;
+    }
+    
+    /* Hide Streamlit branding */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
 </style>
 """, unsafe_allow_html=True)
 
@@ -119,6 +266,10 @@ def initialize_session_state():
         st.session_state.api_key_configured = False
     if 'user_api_key' not in st.session_state:
         st.session_state.user_api_key = None
+    if 'document_summaries' not in st.session_state:
+        st.session_state.document_summaries = {}
+    if 'suggested_questions' not in st.session_state:
+        st.session_state.suggested_questions = []
 
 def sidebar():
     """Render sidebar with document upload and management"""
@@ -142,10 +293,20 @@ def sidebar():
             st.markdown("---")
             st.markdown("### 📚 Loaded Documents")
             for doc in st.session_state.documents:
-                with st.expander(f"📄 {doc['name']}"):
-                    st.write(f"**Pages:** {doc['pages']}")
-                    st.write(f"**Chunks:** {doc['chunks']}")
-                    st.write(f"**Uploaded:** {doc['timestamp']}")
+                with st.expander(f"📄 {doc['name']}", expanded=False):
+                    # Document stats
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        st.metric("Pages", doc['pages'])
+                    with col2:
+                        st.metric("Chunks", doc['chunks'])
+                    
+                    # Summary
+                    if 'summary' in doc and doc['summary']:
+                        st.markdown("**📝 Summary:**")
+                        st.info(doc['summary'])
+                    
+                    st.caption(f"Uploaded: {doc['timestamp']}")
         
         # Clear all button
         if st.session_state.documents:
@@ -206,6 +367,71 @@ def sidebar():
         Config.CHUNK_SIZE = chunk_size
         Config.CHUNK_OVERLAP = chunk_overlap
         Config.TOP_K = top_k
+
+def generate_document_summary(doc_name, chunks):
+    """Generate a quick summary of the document using AI"""
+    try:
+        from langchain_google_genai import ChatGoogleGenerativeAI
+        
+        # Use first few chunks for summary
+        sample_text = " ".join(chunks[:3])[:2000]
+        
+        llm = ChatGoogleGenerativeAI(
+            model=Config.GOOGLE_MODEL,
+            google_api_key=os.getenv("GOOGLE_API_KEY", ""),
+            temperature=0.3
+        )
+        
+        prompt = f"""Provide a brief 2-3 sentence summary of this document:
+
+{sample_text}
+
+Summary:"""
+        
+        response = llm.invoke(prompt)
+        return response.content
+        
+    except Exception as e:
+        logger.error(f"Error generating summary: {str(e)}")
+        return "Summary generation failed."
+
+def generate_suggested_questions():
+    """Generate suggested questions based on uploaded documents"""
+    try:
+        if not st.session_state.documents:
+            return []
+        
+        from langchain_google_genai import ChatGoogleGenerativeAI
+        
+        # Get document names
+        doc_names = [doc['name'] for doc in st.session_state.documents]
+        
+        llm = ChatGoogleGenerativeAI(
+            model=Config.GOOGLE_MODEL,
+            google_api_key=os.getenv("GOOGLE_API_KEY", ""),
+            temperature=0.7
+        )
+        
+        prompt = f"""Based on these document names: {', '.join(doc_names)}
+
+Generate 5 smart, specific questions that users might want to ask about these documents.
+Make them diverse and useful.
+
+Format: Return only the questions, one per line, without numbering."""
+        
+        response = llm.invoke(prompt)
+        questions = [q.strip() for q in response.content.split('\n') if q.strip() and not q.strip().startswith('#')]
+        return questions[:5]
+        
+    except Exception as e:
+        logger.error(f"Error generating questions: {str(e)}")
+        return [
+            "What are the main topics covered in these documents?",
+            "Can you summarize the key findings?",
+            "What are the most important points?",
+            "Are there any conclusions or recommendations?",
+            "What information is most relevant to my needs?"
+        ]
 
 def validate_google_api_key(api_key):
     """Validate Google Gemini API key by making a test call"""
@@ -321,9 +547,11 @@ def process_documents(uploaded_files):
                 st.session_state.embeddings_manager = EmbeddingsManager()
             
             progress_bar = st.progress(0)
+            status_text = st.empty()
             total_files = len(uploaded_files)
             
             for idx, uploaded_file in enumerate(uploaded_files):
+                status_text.text(f"Processing {uploaded_file.name}...")
                 logger.info(f"Processing {uploaded_file.name}")
                 
                 # Save uploaded file temporarily
@@ -336,18 +564,23 @@ def process_documents(uploaded_files):
                 # Process document
                 chunks, metadata = processor.process_pdf(str(temp_path))
                 
+                # Generate summary
+                status_text.text(f"Generating summary for {uploaded_file.name}...")
+                summary = generate_document_summary(uploaded_file.name, chunks)
+                
                 # Add to vector store
                 st.session_state.embeddings_manager.add_documents(
                     chunks,
                     metadata
                 )
                 
-                # Store document info
+                # Store document info with summary
                 st.session_state.documents.append({
                     'name': uploaded_file.name,
                     'pages': metadata.get('total_pages', 0),
                     'chunks': len(chunks),
-                    'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    'summary': summary
                 })
                 
                 # Update progress
@@ -362,6 +595,11 @@ def process_documents(uploaded_files):
             )
             st.session_state.vector_store_ready = True
             
+            # Generate suggested questions
+            status_text.text("Generating suggested questions...")
+            st.session_state.suggested_questions = generate_suggested_questions()
+            
+            status_text.empty()
             st.success(f"✅ Successfully processed {total_files} document(s)!")
             logger.info(f"Processed {total_files} documents successfully")
             
@@ -411,8 +649,9 @@ def display_chat_message(message):
     
     st.markdown(f"""
     <div class="chat-message {css_class}">
-        <strong style="color: #1f77b4;">{icon} {role.capitalize()}</strong><br>
-        <p style="color: #000000; margin-top: 0.5rem;">{content}</p>
+        <span class="message-icon">{icon}</span>
+        <strong>{role.capitalize()}</strong><br>
+        <p style="margin-top: 0.75rem;">{content}</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -421,12 +660,12 @@ def display_chat_message(message):
         with st.expander("📎 View Sources", expanded=False):
             for i, citation in enumerate(message['citations'], 1):
                 st.markdown(f"""
-                <div style="background-color: #f8f9fa; padding: 1rem; border-radius: 0.5rem; margin-bottom: 0.5rem; border-left: 3px solid #1f77b4;">
-                    <p style="color: #000000; margin: 0;"><strong style="color: #1f77b4;">Source {i}</strong></p>
-                    <p style="color: #000000; margin: 0.5rem 0 0 0;"><strong>Document:</strong> <span style="color: #000000;">{citation['source']}</span></p>
-                    <p style="color: #000000; margin: 0.25rem 0 0 0;"><strong>Page:</strong> <span style="color: #000000;">{citation['page']}</span></p>
-                    <p style="color: #000000; margin: 0.25rem 0 0 0;"><strong>Relevance Score:</strong> <span style="color: #000000;">{citation['score']:.2f}</span></p>
-                    <p style="color: #000000; margin: 0.5rem 0 0 0;"><em style="color: #666;">Excerpt:</em> <span style="color: #333;">{citation['text'][:200]}...</span></p>
+                <div class="citation-card">
+                    <p style="margin: 0;"><strong style="color: #667eea;">📌 Source {i}</strong></p>
+                    <p style="margin: 0.5rem 0 0 0;"><strong>Document:</strong> {citation['source']}</p>
+                    <p style="margin: 0.25rem 0 0 0;"><strong>Page:</strong> {citation['page']}</p>
+                    <p style="margin: 0.25rem 0 0 0;"><strong>Relevance:</strong> {citation['score']:.0%}</p>
+                    <p style="margin: 0.75rem 0 0 0; color: #64748b;"><em>"{citation['text'][:200]}..."</em></p>
                 </div>
                 """, unsafe_allow_html=True)
 
@@ -434,13 +673,13 @@ def main():
     """Main application"""
     initialize_session_state()
     
-    # Header
+    # Header with modern design
     st.markdown('<div class="main-header">📚 Document Chat Assistant</div>', unsafe_allow_html=True)
-    st.markdown("Upload PDF documents and chat with them using AI-powered search and generation.")
+    st.markdown('<div class="subtitle">Upload documents and chat with them using AI-powered intelligence</div>', unsafe_allow_html=True)
     
     # Check API key first
     if not check_api_key_section():
-        st.info("👆 Please configure your API key above to continue.")
+        st.markdown('<div class="info-box">👆 Please configure your API key above to continue.</div>', unsafe_allow_html=True)
         st.stop()
     
     # Sidebar
@@ -448,23 +687,88 @@ def main():
     
     # Main chat interface
     if not st.session_state.vector_store_ready:
-        st.info("👈 Upload and process documents from the sidebar to start chatting!")
+        # Welcome screen with better design
+        st.markdown('<div class="info-box">', unsafe_allow_html=True)
+        st.markdown("### 👋 Welcome!")
+        st.markdown("Upload PDF documents from the sidebar to start chatting with them using AI.")
+        st.markdown('</div>', unsafe_allow_html=True)
         
-        # Show example queries
+        # Show example queries in a nice grid
         st.markdown("### 💡 Example Questions You Can Ask:")
-        st.markdown("""
-        - What are the main topics covered in these documents?
-        - Summarize the key findings from page 5
-        - Compare the approaches mentioned in different documents
-        - What does the document say about [specific topic]?
-        """)
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            st.markdown("""
+            <div class="doc-card">
+                <strong>📊 Analysis</strong><br>
+                • What are the main topics?<br>
+                • Summarize key findings<br>
+                • What are the conclusions?
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col2:
+            st.markdown("""
+            <div class="doc-card">
+                <strong>🔍 Search</strong><br>
+                • Find information about [topic]<br>
+                • Compare different sections<br>
+                • What does page X say about Y?
+            </div>
+            """, unsafe_allow_html=True)
     else:
+        # Show document statistics
+        if st.session_state.documents:
+            col1, col2, col3 = st.columns(3)
+            
+            total_pages = sum(doc['pages'] for doc in st.session_state.documents)
+            total_chunks = sum(doc['chunks'] for doc in st.session_state.documents)
+            
+            with col1:
+                st.markdown(f"""
+                <div class="stat-card">
+                    <div class="stat-number">{len(st.session_state.documents)}</div>
+                    <div class="stat-label">Documents</div>
+                </div>
+                """, unsafe_allow_html=True)
+            
+            with col2:
+                st.markdown(f"""
+                <div class="stat-card">
+                    <div class="stat-number">{total_pages}</div>
+                    <div class="stat-label">Total Pages</div>
+                </div>
+                """, unsafe_allow_html=True)
+            
+            with col3:
+                st.markdown(f"""
+                <div class="stat-card">
+                    <div class="stat-number">{total_chunks}</div>
+                    <div class="stat-label">Text Chunks</div>
+                </div>
+                """, unsafe_allow_html=True)
+        
+        # Show suggested questions if available and no messages yet
+        if st.session_state.suggested_questions and not st.session_state.messages:
+            st.markdown("### 💡 Suggested Questions")
+            st.markdown("Click on any question to ask it:")
+            
+            # Display suggested questions as clickable buttons
+            for question in st.session_state.suggested_questions:
+                if st.button(question, key=f"suggested_{question}", use_container_width=True):
+                    # Add user message
+                    st.session_state.messages.append({
+                        'role': 'user',
+                        'content': question
+                    })
+                    st.rerun()
+        
         # Display chat messages
         for message in st.session_state.messages:
             display_chat_message(message)
         
         # Chat input
-        if prompt := st.chat_input("Ask a question about your documents..."):
+        if prompt := st.chat_input("💬 Ask a question about your documents..."):
             # Add user message
             st.session_state.messages.append({
                 'role': 'user',
@@ -475,7 +779,7 @@ def main():
             display_chat_message(st.session_state.messages[-1])
             
             # Generate response
-            with st.spinner("Thinking..."):
+            with st.spinner("🤔 Thinking..."):
                 try:
                     response, citations = st.session_state.chat_engine.chat(
                         prompt,
